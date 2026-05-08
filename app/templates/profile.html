@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h2 class="mb-0">Профиль {{ user.username }}</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label"><strong>Имя пользователя:</strong></label>
+                    <p class="form-control-plaintext">{{ user.username }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Email:</strong></label>
+                    <p class="form-control-plaintext">{{ user.email }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Описание:</strong></label>
+                    <p class="form-control-plaintext">{{ user.bio if user.bio else 'Нету описания' }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Участник с:</strong></label>
+                    <p class="form-control-plaintext">{{ user.created_at if user.created_at else 'N/A' }}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('main.edit_profile') }}" class="btn btn-primary">Редактировать профиль</a>
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Вернуться</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

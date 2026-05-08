@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Кабинет{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="h5">Добавить заметку</h3>
+                <form method="post">
+                    {{ note_form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ note_form.title.label(class="form-label") }}
+                        {{ note_form.title(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ note_form.content.label(class="form-label") }}
+                        {{ note_form.content(class="form-control", rows=4) }}
+                    </div>
+                    {{ note_form.submit(class="btn btn-primary") }}
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="h5">Загрузка файла</h3>
+                <form method="post" enctype="multipart/form-data">
+                    {{ upload_form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ upload_form.file.label(class="form-label") }}
+                        {{ upload_form.file(class="form-control") }}
+                    </div>
+                    {{ upload_form.submit(class="btn btn-secondary") }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="h5">Мои заметки</h3>
+                {% if notes %}
+                    {% for note in notes %}
+                        <div class="border rounded p-2 mb-2 bg-light">
+                            <div class="fw-bold">{{ note.title }}</div>
+                            <div>{{ note.content }}</div>
+                            <form method="post" action="{{ url_for('main.delete_note', note_id=note.id) }}" class="mt-2">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted mb-0">Пока нет заметок.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="h5">Мои файлы</h3>
+                {% if files %}
+                    <ul class="list-group">
+                        {% for item in files %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>{{ item.original_name }}</span>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('main.download_file', file_id=item.id) }}" class="btn btn-sm btn-outline-primary">
+                                        Скачать
+                                    </a>
+                                    <form method="post" action="{{ url_for('main.delete_file', file_id=item.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted mb-0">Файлы еще не загружены.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
