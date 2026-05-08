@@ -31,6 +31,16 @@ class Note(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
+    images = db.relationship("NoteImage", backref="note", lazy=True, cascade="all, delete-orphan")
+
+
+class NoteImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    original_name = db.Column(db.String(255), nullable=False)
+    stored_name = db.Column(db.String(255), nullable=False)
+    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    note_id = db.Column(db.Integer, db.ForeignKey("note.id"), nullable=False)
+
 
 class UserFile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
